@@ -1,20 +1,20 @@
 package com.example.appsaudemain
 
+import android.app.DatePickerDialog
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.*
 
 class MeusRemedios : AppCompatActivity() {
 
     private val listaRemedios = mutableListOf<Remedio>()
-    private lateinit var adapter: RemedioAdapter
     private val PREFS_NAME = "remedios_prefs"
     private val REMEDIOS_KEY = "lista_remedios"
+
+    private var dataSelecionada = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,28 +23,42 @@ class MeusRemedios : AppCompatActivity() {
         val editNome = findViewById<EditText>(R.id.editNome)
         val editQuantidade = findViewById<EditText>(R.id.editQuantidade)
         val editHorario = findViewById<EditText>(R.id.editHorario)
+        val txtData = findViewById<TextView>(R.id.txtDataSelecionada)
+        val btnData = findViewById<Button>(R.id.btnEscolherData)
         val btnAdicionar = findViewById<Button>(R.id.btnAdicionar)
         val btnVoltar = findViewById<Button>(R.id.btnVoltar)
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerRemedios)
-
-        adapter = RemedioAdapter(listaRemedios) { salvarRemedios() }
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
 
         carregarRemedios()
 
+        btnData.setOnClickListener {
+            val c = Calendar.getInstance()
+            DatePickerDialog(this, { _, y, m, d ->
+                dataSelecionada = "%02d/%02d/%04d".format(d, m + 1, y)
+                txtData.text = dataSelecionada
+            }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
         btnAdicionar.setOnClickListener {
-            val nome = editNome.text.toString()
+            val nome = editNome.text.toString().trim()
             val qtd = editQuantidade.text.toString().toIntOrNull() ?: 0
-            val horario = editHorario.text.toString()
-            if (nome.isNotEmpty() && horario.isNotEmpty()) {
-                listaRemedios.add(Remedio(nome, qtd, horario))
-                adapter.notifyDataSetChanged()
-                salvarRemedios()
-                editNome.text.clear()
-                editQuantidade.text.clear()
-                editHorario.text.clear()
+            val horario = editHorario.text.toString().trim()
+
+            if (nome.isEmpty() || horario.isEmpty() || dataSelecionada.isEmpty()) {
+                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val remedio = Remedio(nome, qtd, horario, dataSelecionada)
+            listaRemedios.add(remedio)
+            salvarRemedios()
+
+            Toast.makeText(this, "Remédio salvo!", Toast.LENGTH_SHORT).show()
+
+            editNome.text.clear()
+            editQuantidade.text.clear()
+            editHorario.text.clear()
+            txtData.text = "Nenhuma data selecionada"
+            dataSelecionada = ""
         }
 
         btnVoltar.setOnClickListener { finish() }
@@ -52,20 +66,13 @@ class MeusRemedios : AppCompatActivity() {
 
     private fun salvarRemedios() {
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-        val editor = prefs.edit()
-        val json = Gson().toJson(listaRemedios)
-        editor.putString(REMEDIOS_KEY, json)
-        editor.apply()
+        prefs.edit().putString(REMEDIOS_KEY, Gson().toJson(listaRemedios)).apply()
     }
 
     private fun carregarRemedios() {
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-        val json = prefs.getString(REMEDIOS_KEY, null)
-        if (!json.isNullOrEmpty()) {
-            val type = object : TypeToken<MutableList<Remedio>>() {}.type
-            val listaSalva: MutableList<Remedio> = Gson().fromJson(json, type)
-            listaRemedios.addAll(listaSalva)
-            adapter.notifyDataSetChanged()
-        }
+        val json = prefs.getString(REMEDIOS_KEY, null) ?: return
+        val type = object : TypeToken<MutableList<Remedio>>() {}.type
+        listaRemedios.addAll(Gson().fromJson(json, type))
     }
 }

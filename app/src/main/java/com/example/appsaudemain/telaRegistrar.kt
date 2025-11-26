@@ -20,7 +20,6 @@ class telaRegistrar : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastrar)
 
-        // Inicializando views
         inputNome = findViewById(R.id.inputNome)
         inputEmail = findViewById(R.id.inputEmail)
         inputSenha = findViewById(R.id.inputSenha)
@@ -32,7 +31,7 @@ class telaRegistrar : AppCompatActivity() {
         }
 
         buttonVoltar.setOnClickListener {
-            finish() // Volta para a tela de login
+            finish()
         }
     }
 
@@ -55,7 +54,6 @@ class telaRegistrar : AppCompatActivity() {
             return
         }
 
-        // Adiciona usuário
         val userObj = JSONObject()
         userObj.put("nome", nome)
         userObj.put("senha", senha)

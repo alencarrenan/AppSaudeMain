@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         loginPassword = findViewById(R.id.loginPassword)
         buttonEntrar = findViewById(R.id.buttonEntrar)
         buttonRegistrar = findViewById(R.id.buttonRegistrar)
-
         buttonEntrar.setOnClickListener { login() }
         buttonRegistrar.setOnClickListener {
             startActivity(Intent(this, telaRegistrar::class.java))
@@ -57,9 +56,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Login correto
         Toast.makeText(this, "Bem-vindo ${userObj.getString("nome")}!", Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this, menuOpcoes::class.java))
+        startActivity(Intent(this, MenuOpcoes::class.java))
         finish()
     }
 }

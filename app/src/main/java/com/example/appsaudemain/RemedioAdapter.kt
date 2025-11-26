@@ -31,7 +31,6 @@ class RemedioAdapter(
         holder.tvQtd.text = "Qtd: ${rem.quantidade}"
         holder.tvHorario.text = "Horário: ${rem.horario}"
 
-        // Clique longo para remover
         holder.itemView.setOnLongClickListener {
             lista.removeAt(position)
             notifyItemRemoved(position)

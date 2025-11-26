@@ -5,30 +5,35 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 
-class menuOpcoes : AppCompatActivity() {
+class MenuOpcoes : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_apos_login)
 
-        // Botão Meus Remédios
         val btnRemedios = findViewById<Button>(R.id.button4)
         btnRemedios.setOnClickListener {
-            val intent = Intent(this, MeusRemedios::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, MeusRemedios::class.java))
         }
 
-        // Botão Minhas Doenças
         val btnMinhasDoencas = findViewById<Button>(R.id.button7)
         btnMinhasDoencas.setOnClickListener {
-            val intent = Intent(this, MinhasDoencas::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, MinhasDoencas::class.java))
         }
 
-        // Botão Voltar, se quiser
+        val btnCalendario = findViewById<Button>(R.id.button6)
+        btnCalendario.setOnClickListener {
+            startActivity(Intent(this, CalendarioActivity::class.java))
+        }
+
+        val btnCadastro = findViewById<Button>(R.id.button8)
+        btnCadastro.setOnClickListener {
+            startActivity(Intent(this, telaRegistrar::class.java))
+        }
+
         val btnVoltar = findViewById<Button>(R.id.buttonVoltar1)
         btnVoltar.setOnClickListener {
             finish()
         }
     }
 }
-

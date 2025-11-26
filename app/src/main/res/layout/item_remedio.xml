@@ -2,26 +2,32 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="8dp"
+    android:padding="12dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#EEEEEE">
 
     <TextView
         android:id="@+id/tvNome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Nome"
+        android:textStyle="bold"
         android:textSize="18sp"
-        android:text="Nome"/>
+        android:paddingBottom="4dp"/>
 
     <TextView
         android:id="@+id/tvQuantidade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Qtd"/>
+        android:text="Qtd: 0"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/tvHorario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Horário"/>
+        android:text="Horário: 00:00"
+        android:textSize="16sp"
+        android:paddingTop="2dp"/>
 </LinearLayout>
